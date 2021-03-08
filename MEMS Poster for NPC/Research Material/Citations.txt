@@ -1,0 +1,12 @@
+1. K. J. Gabriel, "Microelectromechanical systems (MEMS)," 1997 IEEE Aerospace Conference, Snowmass at Aspen, CO, USA, 1997, pp. 9-43 vol.3.
+doi: 10.1109/AERO.1997.574849
+2. M. Sadiku, "MEMS," in IEEE Potentials, vol. 21, no. 1, pp. 4-5, Feb.-March 2002.
+doi: 10.1109/45.985317
+3. K. J. Gabriel, "Microelectromechanical systems (MEMS) tutorial," Proceedings International Test Conference 1998 (IEEE Cat. No.98CH36270), Washington, DC, USA, 1998, pp. 432-441.
+doi: 10.1109/TEST.1998.743183
+4. Liu, Chang, Ph.D. (2012) Foundations of MEMS/Chang Liu (2nd ed.). Prentice Hall, 1 Lake Street, Upper Saddle River, NJ, Pearson Education, Inc.
+5. Hatice Ceylan Koydemir, Haluk Külah, Canan Özgen, Alpaslan Alp, Gülsen Hasçelik, MEMS biosensors for detection of methicillin resistant Staphylococcus aureus, Biosensors and Bioelectronics, Volume 29, Issue 1, 2011, Pages 1-12, 
+doi: 10.1016/j.bios.2011.07.071
+6. John Ojur Dennis, Almur Abdelkreem Saeed Rabih, Mohd Haris Md Khir, Mawahib Gafare Abdalrahman Ahmed, and Abdelazez Yousif Ahmed, “Modeling and Finite Element Analysis Simulation of MEMS Based Acetone Vapor Sensor for Noninvasive Screening of Diabetes,” Journal of Sensors, vol. 2016, Article ID 9563938, 14 pages, 2016. https://doi.org/10.1155/2016/9563938.
+7.M. Elhoseny, G. Ramírez-González, O. M. Abu-Elnasr, S. A. Shawkat, N. Arunkumar and A. Farouk, "Secure Medical Data Transmission Model for IoT-Based Healthcare Systems," in IEEE Access, vol. 6, pp. 20596-20608, 2018. 
+

@@ -1,0 +1,121 @@
+-- you can type in upper/lowercase NP ,upper generally used      
+
+CREATE TABLE school(
+ student_id INT PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR(20) NOT NULL,
+ major VARCHAR(50) UNIQUE,
+ section VARCHAR(1) DEFAULT 'A'
+);
+
+-- NOT NULL makes the field compulsory
+-- UNIQUE makes each value of field different from other 
+--PRIMARY KEY is NOT NULL and UNIQUE by default
+
+--you can also do as for primary key :
+--student_id INT,
+--... ,
+--PRIMARY KEY(student_id)
+
+-- a commandto define structure of table
+DESCRIBE school;
+
+--to delete table use :
+ DROP TABLE school;
+
+ --to add a column to table
+ ALTER TABLE school ADD gpa DECIMAL(3,2);
+
+--to delete a coluumn in table
+ALTER TABLE school DROP gpa;
+
+
+--inserting data( without auto inreament)
+INSERT INTO school(student_id,name, major) VALUES(1, 'Uzair' , 'Biology');
+INSERT INTO school VALUES(2, 'Hamza' , 'Physics','A');
+INSERT INTO school VALUES(3, 'Babar' , 'Chemistry','E');
+--the order of defining coloumns matter( sequentional order)
+
+--use this if one or more field is unknown
+INSERT INTO school VALUES(5,'Talha',NULL);
+
+
+--for AUTO_INREMENT
+INSERT INTO school(name,major,section) VALUES('Yasir' , 'Accounting','A');
+INSERT INTO school (name,major,section)VALUES('Mustufa' , 'Economics','E');
+
+--updating an entry(replacing all similar entry with other)
+UPDATE school 
+SET major = 'Accounting & Finance'
+WHERE major = 'Accounting';
+
+UPDATE school
+SET section = 'F'
+WHERE section = 'A';
+
+-- for specific update
+UPDATE school
+SET section = 'B'
+WHERE major = 'Biology'; 
+
+-- logical : same for AND ...
+UPDATE school
+SET section = 'C'
+WHERE major = 'Accounting & Finance' OR major = 'Economics' ;
+
+UPDATE school
+SET section = 'C'
+WHERE major = 'Accounting & Finance' AND  name ="Mustufa";
+
+-- updating all rows
+UPDATE school
+SET major = 'Engineering'
+
+--deleting a row
+DELETE FROM school
+ WHERE student_id=5;
+
+
+--reading ( * = all/ everything) the table( i.e the data)
+SELECT * FROM school;
+
+--queries
+SELECT name,section FROM school;
+
+-- Way 2 :
+SELECT school.name , school.section FROM school;
+
+--ordering Queries (DEFAULT ascending)
+SELECT name,section 
+FROM school 
+ORDER BY name;
+
+-- descending order
+SELECT name,section 
+FROM school 
+ORDER BY name DESC;
+
+--multiple ordering for large data
+SELECT *
+FROM school 
+ORDER BY name, student_id;
+
+--result Limiter
+SELECT *
+FROM school 
+LIMIT 2;
+
+#Cherry pick query
+SELECT *
+FROM school
+WHERE name IN ('Mustufa','Uzair');
+
+-- Operators
+-- Comments
+--   = Equals
+--   > greater/less than
+--   >= greater and equals than
+--   <> Not equals to
+--   AND / OR
+
+
+

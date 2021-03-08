@@ -1,0 +1,75 @@
+use rand::Rng;
+use std::collections::HashMap;
+use std::io;
+
+fn main() {
+    // create no. of players through i/p
+    let mut players = String::new();
+    println!("No. of players ready to join the game :");
+    io::stdin()
+        .read_line(&mut players)
+        .expect("Invalid Input !");
+    // convert to int
+    let count = players.trim();
+    let count_int = count.parse::<i32>().unwrap();
+    match count.parse::<i32>() {
+        Ok(num) => num,
+        Err(error) => panic!("Invalid Input!"),
+    };
+    println!("{} Players are ready to play", count);
+    let mut i = 0;
+
+    //  let mut names = Vec::new();
+    let mut names = HashMap::new();
+
+    // Input names of players
+    println!("Enter names of players");
+
+    while i < count_int {
+        let mut secret1: i32 = Random();
+        let mut secret2: i32 = Random();
+        let mut secret3: i32 = Random();
+        // if let 6 = &mut secret {
+        //     if let 6 = &mut secret1 {
+        //         if let 6 = &mut secret2 {
+        //             let secret = 0;
+        //             let secret1 = 0;
+        //             let secret2 = 0;
+        //         }
+        //     }
+        // }
+        if secret1 == 6 {
+            if secret2 == 6 {
+                if secret3 == 6 {
+                    let secret1 = 0;
+                    let secret2 = 0;
+                    let secret3 = 0;
+                }
+            }
+        }
+        let mut score = add(secret1, secret2, secret3);
+        let mut person = String::new();
+        io::stdin().read_line(&mut person).expect("Invalid Input !");
+        names.insert(person, secret1);
+        i = i + 1;
+    }
+    //println!("{:#?}",names);
+
+    for mut a in 1..4 {
+        for (key, value) in &names {
+            println!(
+                "Turn {} Dice Roll of Player 1 - {} is {} with total score {} ",
+                a, key, value, &mut score
+            );
+        }
+        let a = a + 1;
+    }
+}
+fn Random() -> i32 {
+    let mut secret: i32 = rand::thread_rng().gen_range(1, 7);
+    secret
+}
+fn add(a: i32, b: i32, c: i32) -> i32 {
+    let sum = a + b + c;
+    sum
+}

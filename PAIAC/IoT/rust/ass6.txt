@@ -1,0 +1,199 @@
+use std::io;
+use rand::Rng;
+use std::collections::HashMap;
+
+
+
+#[derive(Debug)]
+
+struct Player{
+    name :  String,
+    current_score : i32,
+    total_score : i32,
+}
+
+impl Player{
+
+    fn score(&mut self, scores : i32){ self.total_score += scores; }
+
+    fn this_turn(&mut self, scores : i32){ self.current_score += scores; }
+
+    fn reset_this_turn(&mut self){
+        self.current_score = 0;
+    }
+
+    fn reset_score(&mut self){ self.total_score = 0; }
+
+}
+
+fn main() {
+    println!(" <: Welcome to Snake & Ladder Game :>");
+
+    loop {
+        let mut no_of_players : String =  String::new();
+        println!("Enter number of players: ");
+
+        io::stdin().read_line(&mut no_of_players)
+            .expect("Could not get input from user.");
+
+        let no_of_players : i32 = match no_of_players.trim().parse(){
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid Input!");
+                continue;
+            },
+        };
+
+        println!("No of player playing {}", no_of_players);
+
+        let mut players = all_players(no_of_players);
+
+        let mut count = 0;
+        let mut flag = false;
+
+        loop{
+            count += 1;
+
+            let mut kick : HashMap<i32, String> = HashMap::new();
+            let mut kick_player = "";
+
+
+
+            for friend in &mut players {
+
+
+                let mut current_dice_score = dice();
+
+
+                if current_dice_score == 6 {
+
+                    friend.this_turn(current_dice_score);
+                    friend.score(current_dice_score);
+
+                    let mut dice_roll_2 = dice();
+
+
+                    if dice_roll_2 == 6 {
+
+                        friend.this_turn(dice_roll_2);
+                        friend.score(dice_roll_2);
+
+                        let mut dice_roll_3 = dice();
+
+                        if dice_roll_3 == 6 {
+
+                            friend.score(-friend.current_score);
+                            friend.reset_this_turn();
+                            println!("Oops got 3 sixes in a row.");
+
+
+                        } else {
+
+                            friend.this_turn(dice_roll_3);
+                            friend.score(dice_roll_3);
+
+                            if friend.total_score > 100 {
+                                friend.score(-friend.current_score);
+                            }
+
+                        }
+
+                    } else {
+
+                        friend.this_turn(dice_roll_2);
+                        friend.score(dice_roll_2);
+
+                        if friend.total_score > 100 {
+                            friend.score(-friend.current_score);
+                        }
+
+                    }
+
+
+                } else {
+
+                    friend.this_turn(current_dice_score);
+                    friend.score(current_dice_score);
+
+                    if friend.total_score > 100 {
+                        friend.score(-friend.current_score);
+                    }
+                }
+
+
+                println!("{}: Dice rolled for {} current dice score {} and total {}", count, friend.name, friend.current_score, friend.total_score);
+
+                if friend.total_score == 100 {
+                    flag = true;
+                    println!("Congratulations! {} you have won the game", friend.name);
+                    break;
+                }
+
+                if kick.contains_key(&friend.total_score){
+                    let index = match kick.get(&friend.total_score) {
+                        Some(name) => name,
+                        None => "None",
+                    };
+
+                    kick_player = index.trim();
+
+                    println!("Alas! {} has kicked {} at score {}", kick_player, friend.name, friend.total_score);
+                    friend.reset_score();
+                }
+
+
+                kick.insert(friend.total_score, friend.name.clone());
+
+                friend.reset_this_turn();
+
+            }
+
+            let mut enter_end = String::new();
+            io::stdin().read_line(&mut enter_end).expect("Enter wasn't pressed");
+
+
+
+            if flag {
+              break;
+            }
+
+        }
+
+        if flag {
+            break;
+        }
+
+
+    }
+}
+
+fn person(input_name : String) -> Player{
+    let friend = Player{
+        name : input_name,
+        current_score : 0,
+        total_score : 0,
+        };
+    return friend;
+}
+
+fn all_players (no_of_friends : i32) -> Vec<Player> {
+    let mut players : Vec<Player> = Vec::new();
+    for i in 0 .. no_of_friends {
+        let mut input_name: String = String::new();
+
+        println!("Enter name of player {} : ", (i + 1));
+        io::stdin().read_line(&mut input_name).expect("Couldn't read the input!");
+
+        players.push(person(String::from(input_name)));
+
+    }
+
+    return players;
+
+}
+
+fn dice() -> i32 {
+    let dice = rand::thread_rng().gen_range(1, 7);
+    return dice;
+}
+

@@ -1,0 +1,359 @@
+
+CREATE TABLE employee (
+  emp_id INT PRIMARY KEY,
+  first_name VARCHAR(40),
+  last_name VARCHAR(40),
+  birth_day DATE,
+  sex VARCHAR(1),
+  salary INT,
+  super_id INT,
+  branch_id INT
+);
+
+CREATE TABLE branch (
+  branch_id INT PRIMARY KEY,
+  branch_name VARCHAR(40),
+  mgr_id INT,
+  mgr_start_date DATE,
+  FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL
+);
+
+ALTER TABLE employee
+ADD FOREIGN KEY(branch_id)
+REFERENCES branch(branch_id)
+ON DELETE SET NULL;
+
+ALTER TABLE employee
+ADD FOREIGN KEY(super_id)
+REFERENCES employee(emp_id)
+ON DELETE SET NULL;
+
+CREATE TABLE client (
+  client_id INT PRIMARY KEY,
+  client_name VARCHAR(40),
+  branch_id INT,
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE SET NULL
+);
+
+CREATE TABLE works_with (
+  emp_id INT,
+  client_id INT,
+  total_sales INT,
+  PRIMARY KEY(emp_id, client_id),
+  FOREIGN KEY(emp_id) REFERENCES employee(emp_id) ON DELETE CASCADE,
+  FOREIGN KEY(client_id) REFERENCES client(client_id) ON DELETE CASCADE
+);
+
+CREATE TABLE branch_supplier (
+  branch_id INT,
+  supplier_name VARCHAR(40),
+  supply_type VARCHAR(40),
+  PRIMARY KEY(branch_id, supplier_name),
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
+);
+
+
+----------------------------------------------------------------------------------------------------
+
+-- Corporate
+INSERT INTO employee VALUES(100, 'David', 'Wallace', '1967-11-17', 'M', 250000, NULL, NULL);
+
+INSERT INTO branch VALUES(1, 'Corporate', 100, '2006-02-09');
+
+UPDATE employee
+SET branch_id = 1
+WHERE emp_id = 100;
+
+INSERT INTO employee VALUES(101, 'Jan', 'Levinson', '1961-05-11', 'F', 110000, 100, 1);
+
+-- Scranton
+INSERT INTO employee VALUES(102, 'Michael', 'Scott', '1964-03-15', 'M', 75000, 100, NULL);
+
+INSERT INTO branch VALUES(2, 'Scranton', 102, '1992-04-06');
+
+UPDATE employee
+SET branch_id = 2
+WHERE emp_id = 102;
+
+INSERT INTO employee VALUES(103, 'Angela', 'Martin', '1971-06-25', 'F', 63000, 102, 2);
+INSERT INTO employee VALUES(104, 'Kelly', 'Kapoor', '1980-02-05', 'F', 55000, 102, 2);
+INSERT INTO employee VALUES(105, 'Stanley', 'Hudson', '1958-02-19', 'M', 69000, 102, 2);
+
+-- Stamford
+INSERT INTO employee VALUES(106, 'Josh', 'Porter', '1969-09-05', 'M', 78000, 100, NULL);
+
+INSERT INTO branch VALUES(3, 'Stamford', 106, '1998-02-13');
+
+UPDATE employee
+SET branch_id = 3
+WHERE emp_id = 106;
+
+INSERT INTO employee VALUES(107, 'Andy', 'Bernard', '1973-07-22', 'M', 65000, 106, 3);
+INSERT INTO employee VALUES(108, 'Jim', 'Halpert', '1978-10-01', 'M', 71000, 106, 3);
+
+
+-- BRANCH SUPPLIER
+INSERT INTO branch_supplier VALUES(2, 'Hammer Mill', 'Paper');
+INSERT INTO branch_supplier VALUES(2, 'Uni-ball', 'Writing Utensils');
+INSERT INTO branch_supplier VALUES(3, 'Patriot Paper', 'Paper');
+INSERT INTO branch_supplier VALUES(2, 'J.T. Forms & Labels', 'Custom Forms');
+INSERT INTO branch_supplier VALUES(3, 'Uni-ball', 'Writing Utensils');
+INSERT INTO branch_supplier VALUES(3, 'Hammer Mill', 'Paper');
+INSERT INTO branch_supplier VALUES(3, 'Stamford Lables', 'Custom Forms');
+
+-- CLIENT
+INSERT INTO client VALUES(400, 'Dunmore Highschool', 2);
+INSERT INTO client VALUES(401, 'Lackawana Country', 2);
+INSERT INTO client VALUES(402, 'FedEx', 3);
+INSERT INTO client VALUES(403, 'John Daly Law, LLC', 3);
+INSERT INTO client VALUES(404, 'Scranton Whitepages', 2);
+INSERT INTO client VALUES(405, 'Times Newspaper', 3);
+INSERT INTO client VALUES(406, 'FedEx', 2);
+
+-- WORKS_WITH
+INSERT INTO works_with VALUES(105, 400, 55000);
+INSERT INTO works_with VALUES(102, 401, 267000);
+INSERT INTO works_with VALUES(108, 402, 22500);
+INSERT INTO works_with VALUES(107, 403, 5000);
+INSERT INTO works_with VALUES(108, 403, 12000);
+INSERT INTO works_with VALUES(105, 404, 33000);
+INSERT INTO works_with VALUES(107, 405, 26000);
+INSERT INTO works_with VALUES(102, 406, 15000);
+INSERT INTO works_with VALUES(105, 406, 130000);
+
+SELECT * FROM employee;
+SELECT * FROM branch;
+SELECT * FROM client;
+SELECT * from school;
+
+-------------------------------------------QUERIES------------------------------------------------
+
+-- All employee ordered by salary
+SELECT *
+FROM employee 
+ORDER BY salary DESC;
+
+--Order by sex and name
+SELECT * 
+FROM employee
+ORDER BY sex ,first_name,last_name;
+
+--First 5 employee form table
+SELECT * 
+FROM employee
+LIMIT 5;
+
+--full anmes of all employees
+SELECT first_name,last_name
+FROM employee;
+
+-- renaming columns (alias) for queries 
+SELECT first_name AS forename ,last_name AS surname
+FROM employee;
+
+-- query for all types of data in a column
+SELECT DISTINCT sex
+FROM employee;
+
+
+--------------------------------------------------FUNCTIONS------------------------------------------
+
+-- Counting no. of data (using function : count() )
+-- using primary key for all unique occurrences
+SELECT COUNT (emp_id)
+FROM employee;
+
+# Checking no. of supervisors
+SELECT  COUNT (super_id)
+FROM employee;
+
+# ALL females born after 1970
+SELECT *
+FROM employee
+WHERE sex = 'F' AND  birth_day > '1970-01-01'; 
+
+-- AVG of all employee salary
+SELECT AVG(salary)
+FROM employee;
+
+-- AVG of all Male employee salary
+SELECT AVG(salary)
+FROM employee
+WHERE sex = 'M';
+
+-- AVG of all Female employee salary
+SELECT AVG(salary)
+FROM employee
+WHERE sex = 'F' ;
+
+-- SUM of all employee salary
+SELECT SUM(salary)
+FROM employee;
+
+-- no. of males and females(FAILED)
+-- This does not show results for both sex
+SELECT COUNT(sex),sex
+FROM employee
+WHERE sex = 'M';
+
+------------------------------------------------GROUP------------------------------------------------
+
+-- no. of males and females
+SELECT COUNT(sex),sex
+FROM employee
+GROUP BY sex;
+
+-- Find total sales of each salesman
+SELECT emp_id,SUM(total_sales)
+FROM works_with
+GROUP BY emp_id;
+
+-- Money spent by client with each branch
+SELECT SUM(total_sales),client_id
+FROM works_with
+GROUP BY client_id;
+
+-----------------------------------------WILDCARDS----------------------------------------------
+
+--     % = any no. of characters ( basically judges part of string)
+--     _ = one character
+
+
+-- Clients who are LLC (with this we write whole name)
+SELECT *
+FROM client
+WHERE client_name = 'John Daly Law, LLC';
+ 
+ # using wildcards 
+ -- Returns a string from client-> client_name with LLC at the end
+SELECT *
+FROM client
+WHERE client_name LIKE '%LLC';
+
+-- Find any branch suppliers that are in labels business
+SELECT *
+FROM branch_supplier
+WHERE supplier_name LIKE '%Labels%';
+
+-- Find any employee born in OCTUBER( 10th month)
+SELECT *
+FROM employee
+WHERE birth_day LIKE '%-10-%';
+
+# way 2 ( _ = for one char)
+SELECT *
+FROM employee
+WHERE birth_day LIKE '____-02-__';
+
+-- Find any client who are schools
+SELECT *
+FROM client
+WHERE client_name LIKE '%school%';
+
+-------------------------------------------UNION----------------------------------------------
+
+--all queries should have same no. of coloumn in select
+--all queries should have same data type
+
+--Combines results of two or more queries together
+SELECT first_name 
+FROM employee
+UNION
+SELECT branch_name 
+FROM branch
+UNION
+SELECT client_name
+FROM client;
+
+-- Find all clients and suppliers
+SELECT client_name AS Companies, branch_id
+# this is client.branch_id
+FROM client
+UNION
+SELECT supplier_name,branch_id
+# this is branch_supplier.branch_id
+FROM branch_supplier;
+
+-- Find the list of all money earned or spent by the company
+SELECT emp_id AS 'worker / partner' ,salary AS MONEY
+FROM employee
+UNION
+SELECT client_id,total_sales
+FROM works_with;
+
+----------------------------------------------------------------------------------------
+INSERT INTO branch VALUES(4, "Buffalo" , NULL, NULL);
+
+SELECT * FROM branch;
+
+------------------------------------------JOINS----------------------------------------
+
+# when there is a column thats common to multiple tables ,the tables can be linked using join
+-- There are four types of joins:
+--1.(inner)JOIN -basic - includes the common of two tables 
+--2.LEFT JOIN - includes all result from 'FROM employee' ,irrespective of data in other fields
+--3.RIGHT JOIN -includes all result from 'JOIN branch' ,irrespective of data in other fields
+--4. FULL OUTER JOIN (not available in MySQL) = LEFT JOIN + RIGHT JOIN -- gives all data irrespective of data in other fields
+
+-- Find all branches and name of their managers -- (inner JOIN)
+SELECT employee.first_name ,  employee.last_name, employee.emp_id ,branch.branch_name
+FROM employee
+JOIN branch
+ON employee.emp_id = branch.mgr_id;
+
+-- Find all branches and name of their managers -- (LEFT JOIN)
+SELECT employee.first_name ,  employee.last_name, employee.emp_id ,branch.branch_name
+FROM employee
+LEFT JOIN branch
+ON employee.emp_id = branch.mgr_id;
+
+-- Find all branches and name of their managers -- (RIGHT JOIN)
+SELECT employee.first_name ,  employee.last_name, employee.emp_id ,branch.branch_name
+FROM employee
+RIGHT JOIN branch
+ON employee.emp_id = branch.mgr_id;
+
+
+
+-----------------------------------NESTED QUERIES---------------------------------------
+
+-- This uses IN keyword and checks if certain condition is true for a certain data
+--i.e : total_sales>30000 for an emp_id so this helps not iterate dataif an entry occurs several times
+--my way : Using joins gives every single entry that exceeds total_sales > 30000 , so 'Stanley' occurs thrice
+
+-- Find all employees who sold more than $30000 to a single client
+# my way- using join
+SELECT employee.emp_id, employee.first_name, works_with.client_id , works_with.total_sales
+FROM employee
+JOIN works_with
+ON employee.emp_id = works_with.emp_id 
+WHERE works_with.total_sales >30000;
+
+#Mike's way - nested
+SELECT employee.emp_id, employee.first_name
+FROM employee
+WHERE employee.emp_id IN (
+     SELECT works_with.emp_id
+     FROM works_with
+     WHERE works_with.total_sales >30000
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

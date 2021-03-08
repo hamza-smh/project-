@@ -1,0 +1,82 @@
+//Importing Libraries
+use std::io;
+use std::collections::HashMap;
+use rand::Rng;
+use std::collections::hash_map::{Keys, Values};
+
+// Main Program
+fn main(){
+
+    println!(" <: Welcome to Snake & Ladder Game :>");
+
+    loop{
+
+        let mut no_of_players : String =  String::new();
+        println!("Enter number of players: ");
+
+        io::stdin().read_line(&mut no_of_players)
+            .expect("Could not get input from user.");
+
+        let no_of_players : i32 = match no_of_players.trim().parse(){
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid Input!");
+                continue;
+            },
+        };
+
+        println!("No of player playing {}", no_of_players);
+
+        let mut players = HashMap::new();
+        let mut players_name : Vec<String> = Vec::new();
+
+        for i in 0 .. no_of_players {
+            let mut input_name: String = String::new();
+
+            println!("Enter name of player {} : ", (i + 1));
+            io::stdin().read_line(&mut input_name).expect("Couldn't read the input!");
+
+            players.insert(String::from(&input_name), 0);
+            players_name.push(String::from(input_name));
+        }
+
+        // player names have stored continue after this part
+
+        let mut flag = false;
+        let mut count = 0;
+
+        loop {
+
+            count += 1;
+            //Looping code
+            for i in 0 .. no_of_players{
+                println!("{}", players_name.get(i));
+            }
+
+
+            println!("{:#?} random number {}", players, dice());
+
+            let mut enter_end = String::new();
+            io::stdin().read_line(&mut enter_end).expect("Enter wasn't pressed");
+
+
+            if count == 5{
+              break;
+            }
+
+
+        }
+
+
+
+
+
+
+    }
+
+}
+
+fn dice() -> i32 {
+    let dice = rand::thread_rng().gen_range(1, 7);
+    return dice;
+}

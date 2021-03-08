@@ -1,0 +1,65 @@
+/*css files have been referred to page1.html  
+via <link rel = "stylesheet" href="page1.css" />*/
+p{
+    /*paragraph background*/ 
+      background: rgb(100, 100, 30));
+      color: white;
+}
+body{
+    /*covers whiole page*/
+    background: rgb(56, 56, 8);
+    color: white;
+}
+div{
+    /*all divs*/
+    background: rgb(1, 24, 1);
+    border: solid black;
+    text-align: center;
+}
+#terms  ol li {
+    text-align: center; 
+    color :yellow
+}
+#skills  ul li {
+    color : red
+    text-align: center;
+
+}
+#quote{
+    font-family: "verdana","gill sans";
+    font-size: 16;
+    font: outline;
+    color: wheat;
+    text-decoration: khaki;
+    text-align: center;
+}
+#btn{
+    background: none;
+    border: none;
+    border-radius :20px solid #4CAF50;
+    object-position: center;
+}   
+
+}
+.weapon{
+        font-size: large;
+        color: rgb(134, 212, 134);
+        text-align: center;
+}
+
+#agree{
+    text-align: center;
+}
+
+span#author{
+    text-transform: uppercase ;
+}
+h1 + p{
+    background: black;
+    color: white;
+/*edits the paragraph after h1 header*/    
+}
+p[class ]{
+    /* edits para with id p[id]
+    /*edits paragraph with a class*/
+}
